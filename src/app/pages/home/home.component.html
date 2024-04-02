@@ -1,0 +1,12 @@
+<p>home works!</p>
+<div class="form-group">
+  <label for=""></label>
+  <select class="form-control" [(ngModel)]="conexion">
+    <option *ngFor="let item of listaConexiones" [value]="item.cadena">{{item.servicio}}</option>
+
+  </select>
+
+  <button type="button" name="" id="" class="btn btn-primary btn-lg btn-block" (click)="enviar()">
+    Enviar
+  </button>
+</div>

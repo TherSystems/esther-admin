@@ -1,0 +1,67 @@
+
+:ng-deep.ng-toast .success #button{
+  color: blue;
+}
+
+:ng-deep.ng-toast .success{
+  color: blue;
+}
+
+::ng-deep {
+  button#close {
+    display: none;
+    color: blue!important;
+    /* Estilos que deseas aplicar al botón con el id "close" */
+  }
+}
+// ::ng-deep.swal2-icon.swal2-info {
+//   border-color: #009efb !important;
+//   color: #009efb !important;
+// }
+
+// ::ng-deep.swal2-icon.swal2-success {
+//   border-color: #39c449 !important;
+//   color: #39c449 !important;
+// }
+
+// ::ng-deep.swal2-icon.swal2-warning {
+//   border-color: #ffbc34 !important;
+//   color: #ffbc34 !important;
+// }
+
+// ::ng-deep.swal2-icon.swal2-error {
+//   border-color: #FA375D !important;
+//   color: #FA375D !important;
+// }
+
+// ::ng-deep.swal2-popup .swal2-html-container {
+//   color: var(--tb-heading-color);
+// }
+
+// ::ng-deep.swal2-popup.swal2-toast {
+//     box-sizing: border-box;
+//     grid-column: 1 / 4 !important;
+//     grid-row: 1 / 4 !important;
+//     grid-template-columns: min-content auto min-content;
+//     padding: 1em;
+//     overflow-y: hidden;
+//     background: var(--tb-secondary-bg) !important;
+//     box-shadow: 0 0 1px rgba(0,0,0,.075), 0 1px 2px rgba(0,0,0,.075), 1px 2px 4px rgba(0,0,0,.075), 1px 3px 8px rgba(0,0,0,.075), 2px 4px 16px rgba(0,0,0,.075);
+//     pointer-events: all;
+// }
+
+
+// ::ng-deep .swal2-icon.swal2-info + .swal2-html-container {
+//   font-family: var(--tb-body-font-family) !important;
+//   font-size: var(--tb-body-font-size) !important;
+//   font-weight: 600 !important;
+//   color: var(--tb-info) !important;
+// }
+
+// ::ng-deep.swal2-html-container{
+//   // font-family: "Times New Roman", Times, serif;
+//   font-family: var(--tb-body-font-family)!important;
+//   font-size: var(--tb-body-font-size)!important;
+//   font-weight: var(--tb-font-weight-medium)!important;
+//     color: #009efb !important;
+// }

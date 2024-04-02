@@ -1,0 +1,54 @@
+{
+  "files.eol": "\r\n",
+  "material-icon-theme.activeIconPack": "angular_ngrx",
+  "editor.rulers": [{
+    "column": 120,
+    "color": "#5eff00",
+  }],
+  "editor.tabSize": 2,
+  "editor.wordWrap": "off",
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit"
+    },
+    "editor.formatOnSave": false
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit",
+      "source.organizeImports": "explicit"
+    },
+    "editor.formatOnSave": true
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit"
+    },
+    "editor.formatOnSave": true
+  },
+  "[html]":{
+    "editor.suggest.insertMode": "replace",
+    "editor.defaultFormatter": "vscode.html-language-features",
+    "editor.codeActionsOnSave": {
+      "source.fixAll.html": "explicit"
+    },
+    "editor.formatOnSave": true
+  },
+  "files.exclude": {
+    "**/node_modules": true,
+    "**/documentation": true,
+    "**/log": true,
+    "**/.scannerwork":true,
+    "**/.husky":false,
+    "**/dist":false,
+
+  },
+  "[javascript][json]": {
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit"
+    }
+  }
+}
