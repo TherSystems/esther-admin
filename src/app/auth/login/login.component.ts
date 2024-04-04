@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AlertService } from '../../core/services/alert.service';
+import { PopUpService } from '../../core/services/popup.service';
 import { DaliaDomValidators } from '../../core/validations/dalia.dom.service';
 import { DaliaValidators } from '../../core/validations/dalia.service';
 import { AuthService } from '../auth.service';
@@ -20,7 +22,9 @@ export class LoginComponent implements OnInit {
     private _daliaValidators: DaliaValidators,
     private _formBuilder: UntypedFormBuilder,
     private _authService: AuthService,
-    private _routes: Router
+    private _routes: Router,
+    private _alertService: AlertService,
+    private _popUpService: PopUpService
   ) {}
 
   ngOnInit(): void {
@@ -30,14 +34,14 @@ export class LoginComponent implements OnInit {
   createForm(): void {
     this.loginForm = this._formBuilder.group({
       email: ['vgluzmaria96@gmail.com', [Validators.required, Validators.email, this._daliaValidators.noWhitespace]],
-      password: ['ther2023', [Validators.required, this._daliaValidators.noWhitespace]],
+      password: ['Tete2024', [Validators.required, this._daliaValidators.noWhitespace]],
       rememberMe: [false],
     });
   }
 
   logIn(): void {
     if (this.loginForm.invalid) {
-      // this._popUpService.warningFormInvalid(); //Muestra un mensaje de advertencia si el formulario es inválido
+      this._popUpService.warningFormInvalid(); //Muestra un mensaje de advertencia si el formulario es inválido
       return;
     }
     this._authService.logIn(this.loginForm.value).subscribe({
@@ -45,7 +49,9 @@ export class LoginComponent implements OnInit {
         console.log('esto trae el response',response)
         this._routes.navigateByUrl('/')
       },
-      error: (error)=> {console.log(error);}
+      error: (error)=> {
+        this._popUpService.errorsApi(error);
+      }
     })
 
     // this._popUpService.loading(); //Inicia la animación de carga

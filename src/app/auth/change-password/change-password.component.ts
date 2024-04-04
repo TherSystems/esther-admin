@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { PopUpService } from '../../core/services/popup.service';
 import { DaliaDomValidators } from '../../core/validations/dalia.dom.service';
 import { DaliaValidators } from '../../core/validations/dalia.service';
 import { DaliaFormatValidators } from '../../core/validations/dalia.validator.enum';
+import { AuthService } from '../auth.service';
 import { ChangeRequestInterface } from './change-password.interface';
 
 @Component({
@@ -20,7 +23,10 @@ export class ChangePasswordComponent implements OnInit {
   constructor(
     public _daliaDomValidators: DaliaDomValidators,
     private _daliaValidators: DaliaValidators,
-    private _formBuilder: FormBuilder
+    private _formBuilder: FormBuilder,
+    private _activatedRoute: ActivatedRoute,
+    private _authService: AuthService,
+    private _popUpService: PopUpService
   ) {}
 
   ngOnInit(): void {
@@ -50,11 +56,18 @@ export class ChangePasswordComponent implements OnInit {
 
   changePassword(): void {
     const data: ChangeRequestInterface = {
-      token: '',
+      token: this._activatedRoute.snapshot.params['token'],
       password: this.f['password'].value,
       confirmPassword: this.f['confirmPassword'].value,
     };
-
+    this._authService.changePassword(data).subscribe({
+      next: (response)=>{
+        this._popUpService.success(response.message)
+      },
+      error: (error)=>{
+        this._popUpService.errorsApi(error)
+      }
+    })
     console.log(data);
   }
 

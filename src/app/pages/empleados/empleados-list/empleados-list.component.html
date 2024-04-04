@@ -1,0 +1,135 @@
+<p>empleados-list works!</p>
+
+<h1>Empleados list</h1>
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-header d-flex align-items-center">
+        <div class="flex-grow-1">
+          <h5 class="card-title mb-0">Products <span class="badge bg-dark-subtle text-dark ms-1">254</span></h5>
+        </div>
+        <div class="flex-shrink-0">
+          <div class="d-flex flex-wrap align-items-start gap-2">
+            <button class="btn btn-subtle-danger d-none" id="remove-actions" (click)="deleteRecordModal?.show()"><i
+                class="ri-delete-bin-2-line"></i></button>
+            <button type="button" class="btn btn-primary add-btn" (click)="showModal?.show()"><i
+                class="bi bi-plus-circle align-baseline me-1"></i>Agregar Empleado</button>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-centered align-middle table-nowrap mb-0">
+            <thead class="table-active">
+              <tr>
+                <th>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="option" [(ngModel)]="masterSelected"
+                      (change)="checkUncheckAll($event)" id="checkAll">
+                    <label class="form-check-label" for="checkAll"></label>
+                  </div>
+                </th>
+                <th class="sort cursor-pointer" (click)="onSort('title')">Products</th>
+                <th class="sort cursor-pointer" (click)="onSort('category')">Category</th>
+                <th class="sort cursor-pointer" (click)="onSort('stock')">Stock</th>
+                <th class="sort cursor-pointer" (click)="onSort('price')">Price</th>
+                <th class="sort cursor-pointer" (click)="onSort('orders')">Orders</th>
+                <th class="sort cursor-pointer" (click)="onSort('ratings')">Rating</th>
+                <th class="sort cursor-pointer" (click)="onSort('publish')">Published</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody class="list form-check-all">
+              @for ( data of products; track $index) {
+              <tr id="p_{{data._id}}">
+                <td>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="checkAll" value="{{data._id}}"
+                      [(ngModel)]="data.states" (change)="onCheckboxChange($event)">
+                    <label class="form-check-label"></label>
+                  </div>
+                </td>
+                <td class="id" style="display:none;"><a href="javascript:void(0);"
+                    class="fw-medium link-primary">#TB01</a></td>
+                <td class="products">
+                  <div class="d-flex align-items-center">
+                    <div class="avatar-xs bg-light rounded p-1 me-2">
+                      <img src="{{data.img}}" alt="" class="img-fluid d-block">
+                    </div>
+                    <div>
+                      <h6 class="mb-0"><a routerLink="/ecommerce/product-details"
+                          class="text-reset products">{{data.title}}</a></h6>
+                    </div>
+                  </div>
+                </td>
+                <td class="discount d-none">{{data.discount}}</td>
+                <td class="category">{{data.category}}</td>
+                <td class="stock">{{data.stock}}</td>
+                <td class="price">${{data.price}}</td>
+                <td class="orders">{{data.orders}}</td>
+                <td class="rating">
+                  <span class="badge bg-warning-subtle text-warning"><i class="bi bi-star-fill align-baseline me-1"></i>
+                    {{data.ratings}}</span>
+                </td>
+                <td class="published">{{data.publish}}</td>
+                <td>
+                  <div dropdown class="dropdown">
+                    <button dropdownToggle class="btn btn-subtle-secondary btn-sm btn-icon">
+                      <i class="bi bi-three-dots-vertical"></i>
+                    </button>
+
+                    <ul *bsDropdownMenu class="dropdown-menu dropdown-menu-end">
+                      <li><a class="dropdown-item" routerLink="/ecommerce/product-details" href="javascript:void(0);"><i
+                            class="ph-eye align-middle me-1"></i> View</a></li>
+                      <li><a class="dropdown-item edit-item-btn" (click)="editList($index)"><i
+                            class="ph-pencil align-middle me-1"></i>
+                          Edit</a></li>
+                      <li><a class="dropdown-item remove-item-btn" (click)="removeItem(data.id)"
+                          href="javascript:void(0);"><i class="ph-trash align-middle me-1"></i> Remove</a></li>
+                    </ul>
+                  </div>
+                </td>
+              </tr>
+              }
+            </tbody>
+            <div id="elmLoader">
+              <div class="spinner-border text-primary avatar-sm" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+            </div>
+          </table>
+        </div><!--end table-responsive-->
+
+        <div class="noresult" style="display: none;">
+          <div class="text-center py-4">
+            <div class="avatar-md mx-auto mb-4">
+              <div class="avatar-title bg-light text-primary rounded-circle fs-4xl">
+                <i class="bi bi-search"></i>
+              </div>
+            </div>
+            <h5 class="mt-2">Sorry! No Result Found</h5>
+            <p class="text-muted mb-0">We've searched more than 150+ products We did not find any
+              products for you search.</p>
+          </div>
+        </div>
+        <!-- end noresult -->
+
+        <div class="row mt-3 align-items-center" id="pagination-element">
+          <div class="col-sm">
+            <div class="text-muted text-center text-sm-start">
+              Showing <span class="fw-semibold">{{products?.length}}</span> of <span
+                class="fw-semibold">{{allproducts?.length}}</span> Results
+            </div>
+          </div>
+
+          <div class="col-sm-auto mt-3 mt-sm-0">
+            <pagination class="pagination-wrap hstack gap-2 justify-content-center" [totalItems]="allproducts?.length"
+              [itemsPerPage]="10" (pageChanged)="pageChanged($event)"></pagination>
+          </div>
+        </div>
+        <!-- end pagination-element -->
+      </div>
+    </div><!--end card-->
+  </div><!--end col-->
+</div><!--end row-->

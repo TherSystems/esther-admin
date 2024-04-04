@@ -13,4 +13,8 @@ export const pagesRouting: Routes = [
     path: 'employees',
     loadChildren: () => import('./employees/employees.module').then(m => m.EmployeesModule),
   },
+  {
+    path: 'empleados',
+    loadChildren:() => import('./empleados/empleados.module').then(m => m.EmpleadosModule)
+  }
 ];
