@@ -11,3 +11,7 @@ const homeRoute: Route = { path: '', component: HomeComponent };
   imports: [CommonModule, RouterModule.forChild([homeRoute]), FormsModule],
 })
 export class HomeModule {}
+
+
+
+
