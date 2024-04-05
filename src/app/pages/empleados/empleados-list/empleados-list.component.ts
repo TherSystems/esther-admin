@@ -1,29 +1,52 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
-import { ModalDirective } from 'ngx-bootstrap/modal';
+import { Router } from '@angular/router';
 import { PageChangedEvent } from 'ngx-bootstrap/pagination';
+import { PopUpService } from '../../../core/services/popup.service';
+import { EmployeeService } from '../empleados.service';
 
 @Component({
   selector: 'app-empleados-list',
   templateUrl: './empleados-list.component.html',
   styleUrl: './empleados-list.component.scss'
 })
-export class EmpleadosListComponent {
+export class EmpleadosListComponent{
 
   masterSelected!: boolean;
   products: any;
+  empleados: any [] = []
   productForm!: UntypedFormGroup;
   endItem: any
 // Table data
 allproducts: any;
 
 
-  @ViewChild('showModal', { static: false }) showModal?: ModalDirective;
-  @ViewChild('deleteRecordModal', { static: false }) deleteRecordModal?: ModalDirective;
-  deleteId: any;
+  constructor(
+    private _employeeService: EmployeeService, 
+    private _popUpService:PopUpService,
+    private _route:Router
+    ){}
 
-  uploadedFiles: any[] = [];
+  ngOnInit(){
+    this.listAllEmployee()
+    }
 
+
+    
+listAllEmployee(){
+  this._employeeService.getAllEmployee().subscribe({
+    next:(response)=>{
+      this.empleados= response
+      console.log('Esto trae el response',this.empleados)},
+    error: (error)=>{console.log(error)
+    this._popUpService.errorsApi(error)
+    }
+  })
+}
+
+goToEmployeeDetail(){
+  this._route.navigate(['/empleados-detail'])
+}
 
   checkedValGet: any[] = [];
   // The master checkbox will check/ uncheck all items
@@ -47,19 +70,7 @@ allproducts: any;
   public items: string[] = ['Adidas', 'Boat', 'Puma', 'Realme'];
   // Sort Data
   direction: any = 'asc';
-  onSort(column: any) {
-    if (this.direction == 'asc') {
-      this.direction = 'desc';
-    } else {
-      this.direction = 'asc';
-    }
-    const sortedArray = [...this.products]; // Create a new array
-    sortedArray.sort((a, b) => {
-      const res = this.compare(a[column], b[column]);
-      return this.direction === 'asc' ? res : -res;
-    });
-    this.products = sortedArray;
-  }
+
   compare(v1: string | number, v2: string | number) {
     return v1 < v2 ? -1 : v1 > v2 ? 1 : 0;
   }
@@ -79,28 +90,14 @@ allproducts: any;
     }
 
 
-      // Delete Product
-  removeItem(id: any) {
-    this.deleteId = id
-    this.deleteRecordModal?.show()
-  }
-    // Edit Data
-    editList(id: any) {
-      this.showModal?.show()
-      var modaltitle = document.querySelector('.modal-title') as HTMLAreaElement
-      modaltitle.innerHTML = 'Edit Product'
-      var modalbtn = document.getElementById('add-btn') as HTMLAreaElement
-      modalbtn.innerHTML = 'Update'
-  
-      var editData = this.products[id]
-      this.uploadedFiles.push({ 'dataURL': editData.img, 'name': editData.img_alt, 'size': 1024, });
-      this.productForm.patchValue(this.products[id]);
-    }
   
     pageChanged(event: PageChangedEvent): void {
       const startItem = (event.page - 1) * event.itemsPerPage;
       this.endItem = event.page * event.itemsPerPage;
       this.products = this.allproducts.slice(startItem, this.endItem);
     }
+
+
+
 
 }

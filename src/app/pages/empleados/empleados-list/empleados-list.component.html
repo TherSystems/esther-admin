@@ -1,20 +1,18 @@
-<p>empleados-list works!</p>
+<p>empleados/empleadosList</p>
 
-<h1>Empleados list</h1>
+
 
 <div class="row">
   <div class="col-lg-12">
     <div class="card">
       <div class="card-header d-flex align-items-center">
         <div class="flex-grow-1">
-          <h5 class="card-title mb-0">Products <span class="badge bg-dark-subtle text-dark ms-1">254</span></h5>
+          <h5 class="card-title mb-0">Lista de empleados</h5>
         </div>
         <div class="flex-shrink-0">
           <div class="d-flex flex-wrap align-items-start gap-2">
-            <button class="btn btn-subtle-danger d-none" id="remove-actions" (click)="deleteRecordModal?.show()"><i
-                class="ri-delete-bin-2-line"></i></button>
-            <button type="button" class="btn btn-primary add-btn" (click)="showModal?.show()"><i
-                class="bi bi-plus-circle align-baseline me-1"></i>Agregar Empleado</button>
+            <button type="button" class="btn btn-primary add-btn" routerLink="/empleados/nuevo">Agregar
+              Empleado</button>
           </div>
         </div>
       </div>
@@ -30,74 +28,44 @@
                     <label class="form-check-label" for="checkAll"></label>
                   </div>
                 </th>
-                <th class="sort cursor-pointer" (click)="onSort('title')">Products</th>
-                <th class="sort cursor-pointer" (click)="onSort('category')">Category</th>
-                <th class="sort cursor-pointer" (click)="onSort('stock')">Stock</th>
-                <th class="sort cursor-pointer" (click)="onSort('price')">Price</th>
-                <th class="sort cursor-pointer" (click)="onSort('orders')">Orders</th>
-                <th class="sort cursor-pointer" (click)="onSort('ratings')">Rating</th>
-                <th class="sort cursor-pointer" (click)="onSort('publish')">Published</th>
+                <th class="">#</th>
+                <th class="">Nombre</th>
+                <th class="">Apellidos</th>
+                <th class="">Puesto</th>
+                <th class="">Domiclio</th>
+                <th class="">Cumpleaños</th>
                 <th>Action</th>
               </tr>
             </thead>
             <tbody class="list form-check-all">
-              @for ( data of products; track $index) {
-              <tr id="p_{{data._id}}">
+              <tr *ngFor="let item of empleados">
                 <td>
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="checkAll" value="{{data._id}}"
-                      [(ngModel)]="data.states" (change)="onCheckboxChange($event)">
-                    <label class="form-check-label"></label>
-                  </div>
+
                 </td>
                 <td class="id" style="display:none;"><a href="javascript:void(0);"
                     class="fw-medium link-primary">#TB01</a></td>
                 <td class="products">
                   <div class="d-flex align-items-center">
-                    <div class="avatar-xs bg-light rounded p-1 me-2">
-                      <img src="{{data.img}}" alt="" class="img-fluid d-block">
-                    </div>
                     <div>
-                      <h6 class="mb-0"><a routerLink="/ecommerce/product-details"
-                          class="text-reset products">{{data.title}}</a></h6>
+                      <h6 class="mb-0"><a></a>{{item.id}}</h6>
                     </div>
                   </div>
                 </td>
-                <td class="discount d-none">{{data.discount}}</td>
-                <td class="category">{{data.category}}</td>
-                <td class="stock">{{data.stock}}</td>
-                <td class="price">${{data.price}}</td>
-                <td class="orders">{{data.orders}}</td>
-                <td class="rating">
-                  <span class="badge bg-warning-subtle text-warning"><i class="bi bi-star-fill align-baseline me-1"></i>
-                    {{data.ratings}}</span>
+                <td class="">{{item.person.fullName}}</td>
+                <td class="">{{item.person.fullNameLast}}</td>
+                <td class="">{{item.job.jobPosition.jobPosition}}</td>
+                <td class="">{{item.address.municipality}}</td>
+                <td class="">{{item.person.birthdate}}</td>
+                <td class="">
+                  <span class="badge bg-warning-subtle text-warning"><i
+                      class="bi bi-star-fill align-baseline me-1"></i></span>
                 </td>
-                <td class="published">{{data.publish}}</td>
-                <td>
-                  <div dropdown class="dropdown">
-                    <button dropdownToggle class="btn btn-subtle-secondary btn-sm btn-icon">
-                      <i class="bi bi-three-dots-vertical"></i>
-                    </button>
+                <td class="published"></td>
 
-                    <ul *bsDropdownMenu class="dropdown-menu dropdown-menu-end">
-                      <li><a class="dropdown-item" routerLink="/ecommerce/product-details" href="javascript:void(0);"><i
-                            class="ph-eye align-middle me-1"></i> View</a></li>
-                      <li><a class="dropdown-item edit-item-btn" (click)="editList($index)"><i
-                            class="ph-pencil align-middle me-1"></i>
-                          Edit</a></li>
-                      <li><a class="dropdown-item remove-item-btn" (click)="removeItem(data.id)"
-                          href="javascript:void(0);"><i class="ph-trash align-middle me-1"></i> Remove</a></li>
-                    </ul>
-                  </div>
-                </td>
               </tr>
-              }
+
             </tbody>
-            <div id="elmLoader">
-              <div class="spinner-border text-primary avatar-sm" role="status">
-                <span class="visually-hidden">Loading...</span>
-              </div>
-            </div>
+
           </table>
         </div><!--end table-responsive-->
 

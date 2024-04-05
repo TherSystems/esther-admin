@@ -7,7 +7,7 @@ import { EmpleadosDetailComponent } from './empleados-detail/empleados-detail.co
 import { EmpleadosListComponent } from './empleados-list/empleados-list.component';
 
 const empleadoRoute : Routes = [
-  { path: 'empleados-list', component: EmpleadosListComponent},
+  { path: '', component: EmpleadosListComponent},
   { path: ':uuid', component: EmpleadosDetailComponent}
 ];
 

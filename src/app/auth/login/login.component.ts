@@ -34,7 +34,7 @@ export class LoginComponent implements OnInit {
   createForm(): void {
     this.loginForm = this._formBuilder.group({
       email: ['vgluzmaria96@gmail.com', [Validators.required, Validators.email, this._daliaValidators.noWhitespace]],
-      password: ['Tete2024', [Validators.required, this._daliaValidators.noWhitespace]],
+      password: ['ther2023', [Validators.required, this._daliaValidators.noWhitespace]],
       rememberMe: [false],
     });
   }
