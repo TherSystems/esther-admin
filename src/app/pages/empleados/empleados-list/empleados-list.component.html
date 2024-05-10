@@ -1,103 +1,116 @@
-<p>empleados/empleadosList</p>
-
-
-
+<app-breadcrumbs title="EMPLEADOS.TITULO" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
 <div class="row">
   <div class="col-lg-12">
     <div class="card">
       <div class="card-header d-flex align-items-center">
         <div class="flex-grow-1">
-          <h5 class="card-title mb-0">Lista de empleados</h5>
+          <h5 class="card-title mb-0">{{'EMPLEADOS.TITULO' | translate}}</h5>
         </div>
         <div class="flex-shrink-0">
           <div class="d-flex flex-wrap align-items-start gap-2">
-            <button type="button" class="btn btn-primary add-btn" routerLink="/empleados/nuevo">Agregar
-              Empleado</button>
+            <button type="button" class="btn btn-primary add-btn" routerLink="/empleados/nuevo">
+              {{'EMPLEADOS.NUEVO' | translate}}
+            </button>
           </div>
         </div>
       </div>
       <div class="card-body">
         <div class="table-responsive">
           <table class="table table-centered align-middle table-nowrap mb-0">
+            <!-- ------------------------ Cabezeras de la tabla ------------------------ -->
             <thead class="table-active">
               <tr>
-                <th>
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="option" [(ngModel)]="masterSelected"
-                      (change)="checkUncheckAll($event)" id="checkAll">
-                    <label class="form-check-label" for="checkAll"></label>
-                  </div>
+                <th class="sort cursor-pointer" (click)="onSort('person.fullName')">Id</th>
+                <th class="sort cursor-pointer" (click)="onSort('person.fullName')">
+                  {{'EMPLEADOS.TABLA.NOMBRE' | translate}}
                 </th>
-                <th class="">#</th>
-                <th class="">Nombre</th>
-                <th class="">Apellidos</th>
-                <th class="">Puesto</th>
-                <th class="">Domiclio</th>
-                <th class="">Cumpleaños</th>
-                <th>Action</th>
+                <th class="sort cursor-pointer" (click)="onSort('job.jobPosition.jobPosition')">
+                  {{'EMPLEADOS.TABLA.PUESTO' | translate}}
+                </th>
+                <th>{{'EMPLEADOS.TABLA.DOMICILIO' | translate}}</th>
+                <th class="sort cursor-pointer" (click)="onSort('person.birthdate')">
+                  {{'EMPLEADOS.TABLA.FECHA_NACIMIENTO' | translate}}</th>
+                <th>{{'EMPLEADOS.TABLA.OPCIONES' | translate}}</th>
               </tr>
             </thead>
+            <!-- ---------------------- Fin Cabezeras de la tabla ---------------------- -->
             <tbody class="list form-check-all">
-              <tr *ngFor="let item of empleados">
-                <td>
-
-                </td>
+              <!-- -------------------------- Datos de la tabla -------------------------- -->
+              @for (item of filterArray; track $index) {
+              <tr>
                 <td class="id" style="display:none;"><a href="javascript:void(0);"
                     class="fw-medium link-primary">#TB01</a></td>
                 <td class="products">
                   <div class="d-flex align-items-center">
                     <div>
-                      <h6 class="mb-0"><a></a>{{item.id}}</h6>
+                      <h6 class="mb-0">{{item.id}}</h6>
                     </div>
                   </div>
                 </td>
                 <td class="">{{item.person.fullName}}</td>
-                <td class="">{{item.person.fullNameLast}}</td>
                 <td class="">{{item.job.jobPosition.jobPosition}}</td>
                 <td class="">{{item.address.municipality}}</td>
-                <td class="">{{item.person.birthdate}}</td>
-                <td class="">
-                  <span class="badge bg-warning-subtle text-warning"><i
-                      class="bi bi-star-fill align-baseline me-1"></i></span>
+                <td class="">{{item.person.birthdate | date :'longDate' : '': _translateService.currentLang }}
                 </td>
-                <td class="published"></td>
-
+                <td>
+                  <div dropdown class="dropdown">
+                    <button dropdownToggle class="btn btn-subtle-secondary btn-sm btn-icon">
+                      <i class="bi bi-three-dots-vertical"></i>
+                    </button>
+                    <ul *bsDropdownMenu class="dropdown-menu dropdown-menu-end">
+                      <li>
+                        <a class="dropdown-item" routerLink="/ecommerce/product-details" href="javascript:void(0);">
+                          <i class="ph-eye align-middle me-1"></i> {{'ACCIONES.VER' | translate}}
+                        </a>
+                      </li>
+                      <li>
+                        <a class="dropdown-item edit-item-btn">
+                          <i class="ph-pencil align-middle me-1"></i> {{'ACCIONES.EDITAR' | translate}}</a>
+                      </li>
+                      <li>
+                        <a class="dropdown-item remove-item-btn" href="javascript:void(0);">
+                          <i class="ph-trash align-middle me-1"></i> {{'ACCIONES.ELIMINAR' | translate}}</a>
+                      </li>
+                    </ul>
+                  </div>
               </tr>
-
+              }
+              <!-- ------------------------ Fin Datos de la tabla ------------------------ -->
             </tbody>
-
           </table>
-        </div><!--end table-responsive-->
-
-        <div class="noresult" style="display: none;">
+        </div>
+        <!-- ------------------------ Datos no encontrados ------------------------- -->
+        @if(empleadosArray.length == 0){
+        <div class="noresult">
           <div class="text-center py-4">
             <div class="avatar-md mx-auto mb-4">
               <div class="avatar-title bg-light text-primary rounded-circle fs-4xl">
                 <i class="bi bi-search"></i>
               </div>
             </div>
-            <h5 class="mt-2">Sorry! No Result Found</h5>
-            <p class="text-muted mb-0">We've searched more than 150+ products We did not find any
-              products for you search.</p>
+            <h5 class="mt-2">{{'DATA.NO_RESULTS'| translate}}</h5>
           </div>
         </div>
-        <!-- end noresult -->
-
+        }
+        <!-- ---------------------- Fin datos no encontrados ----------------------- -->
+        <!-- ----------------------------- Paginacion ------------------------------ -->
         <div class="row mt-3 align-items-center" id="pagination-element">
           <div class="col-sm">
-            <div class="text-muted text-center text-sm-start">
-              Showing <span class="fw-semibold">{{products?.length}}</span> of <span
-                class="fw-semibold">{{allproducts?.length}}</span> Results
+            <div class="text-muted text-center text-sm-start"> {{'PAGINACION.MOSTRANDO'| translate}}
+              <span class="fw-semibold">{{filterArray.length}}</span>
+              {{'PAGINACION.DE' | translate}}
+              <span class="fw-semibold">{{empleadosArray.length}}</span> {{'PAGINACION.REGISTROS' | translate}}
             </div>
           </div>
-
           <div class="col-sm-auto mt-3 mt-sm-0">
-            <pagination class="pagination-wrap hstack gap-2 justify-content-center" [totalItems]="allproducts?.length"
-              [itemsPerPage]="10" (pageChanged)="pageChanged($event)"></pagination>
+            <pagination class="pagination-wrap hstack gap-2 justify-content-center" [totalItems]="empleadosArray.length"
+              [itemsPerPage]="itemsPorPagina" (pageChanged)="pageChanged($event)"
+              previousText="{{'PAGINACION.ANTERIOR'| translate}}" nextText="{{'PAGINACION.SIGUIENTE' | translate}}">
+            </pagination>
           </div>
         </div>
-        <!-- end pagination-element -->
+        <!-- --------------------------- Fin Paginacion ---------------------------- -->
       </div>
-    </div><!--end card-->
-  </div><!--end col-->
-</div><!--end row-->
+    </div>
+  </div>
+</div>
