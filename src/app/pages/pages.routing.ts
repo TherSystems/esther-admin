@@ -9,12 +9,9 @@ export const pagesRouting: Routes = [
     path: 'dashboard',
     loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule),
   },
-  {
-    path: 'employees',
-    loadChildren: () => import('./employees/employees.module').then(m => m.EmployeesModule),
-  },
+
   {
     path: 'empleados',
-    loadChildren:() => import('./empleados/empleados.module').then(m => m.EmpleadosModule)
-  }
+    loadChildren: () => import('./empleados/empleados.module').then(m => m.EmpleadosModule),
+  },
 ];

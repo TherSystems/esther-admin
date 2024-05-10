@@ -1,103 +1,63 @@
-import { Component } from '@angular/core';
-import { UntypedFormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import { PageChangedEvent } from 'ngx-bootstrap/pagination';
 import { PopUpService } from '../../../core/services/popup.service';
-import { EmployeeService } from '../empleados.service';
+import { SortedService } from '../../../core/services/sorted.service';
+import { EmpleadosResponse } from '../empleados.interface';
+import { EmpleadosService } from '../empleados.service';
 
 @Component({
   selector: 'app-empleados-list',
   templateUrl: './empleados-list.component.html',
-  styleUrl: './empleados-list.component.scss'
+  styleUrl: './empleados-list.component.scss',
 })
-export class EmpleadosListComponent{
-
-  masterSelected!: boolean;
-  products: any;
-  empleados: any [] = []
-  productForm!: UntypedFormGroup;
-  endItem: any
-// Table data
-allproducts: any;
-
+export class EmpleadosListComponent implements OnInit {
+  /* ----------------------- Informacion del breadcrumb ----------------------- */
+  public breadCrumbItems = [{ label: 'EMPLEADOS.TITULO' }, { label: 'EMPLEADOS.LISTA', active: true }];
+  /* ----------------------- Elementos de la paginacion ----------------------- */
+  public direction: 'asc' | 'desc' = 'asc';
+  public itemsPorPagina = 10;
+  /* ----------------- Lista de datos para mostrar en la tabla ---------------- */
+  public empleadosArray: EmpleadosResponse[] = [];
+  public filterArray: EmpleadosResponse[] = [];
 
   constructor(
-    private _employeeService: EmployeeService, 
-    private _popUpService:PopUpService,
-    private _route:Router
-    ){}
+    public _sortedService: SortedService,
+    public _translateService: TranslateService,
+    private _employeeService: EmpleadosService,
+    private _popUpService: PopUpService
+  ) {}
 
-  ngOnInit(){
-    this.listAllEmployee()
-    }
-
-
-    
-listAllEmployee(){
-  this._employeeService.getAllEmployee().subscribe({
-    next:(response)=>{
-      this.empleados= response
-      console.log('Esto trae el response',this.empleados)},
-    error: (error)=>{console.log(error)
-    this._popUpService.errorsApi(error)
-    }
-  })
-}
-
-goToEmployeeDetail(){
-  this._route.navigate(['/empleados-detail'])
-}
-
-  checkedValGet: any[] = [];
-  // The master checkbox will check/ uncheck all items
-  checkUncheckAll(ev: any) {
-    this.products = this.products.map((x: { states: any }) => ({ ...x, states: ev.target.checked }));
-
-    var checkedVal: any[] = [];
-    var result;
-    for (var i = 0; i < this.products.length; i++) {
-      if (this.products[i].states == true) {
-        result = this.products[i].id;
-        checkedVal.push(result);
-      }
-    }
-
-    this.checkedValGet = checkedVal;
-    checkedVal.length > 0 ? document.getElementById("remove-actions")?.classList.remove('d-none') : document.getElementById("remove-actions")?.classList.add('d-none');
+  ngOnInit(): void {
+    this.getEmpleados();
   }
 
-
-  public items: string[] = ['Adidas', 'Boat', 'Puma', 'Realme'];
-  // Sort Data
-  direction: any = 'asc';
-
-  compare(v1: string | number, v2: string | number) {
-    return v1 < v2 ? -1 : v1 > v2 ? 1 : 0;
+  /* -------------------------------------------------------------------------- */
+  /*                             METODOS DE NEGOCIO                             */
+  /* -------------------------------------------------------------------------- */
+  getEmpleados(): void {
+    this._employeeService.getEmpleados().subscribe({
+      next: (response: EmpleadosResponse[]) => {
+        this.empleadosArray = response;
+        this.filterArray = this.empleadosArray.slice(0, this.itemsPorPagina);
+      },
+      error: error => {
+        this._popUpService.errorsApi(error);
+      },
+    });
   }
-  
-    // Select Checkbox value Get
-    onCheckboxChange(e: any) {
-      var checkedVal: any[] = [];
-      var result
-      for (var i = 0; i < this.products.length; i++) {
-        if (this.products[i].states == true) {
-          result = this.products[i].id;
-          checkedVal.push(result);
-        }
-      }
-      this.checkedValGet = checkedVal
-      checkedVal.length > 0 ? document.getElementById("remove-actions")?.classList.remove('d-none') : document.getElementById("remove-actions")?.classList.add('d-none');
-    }
 
+  /* -------------------------------------------------------------------------- */
+  /*                    Metodos de paginación y ordenamiento                    */
+  /* -------------------------------------------------------------------------- */
+  pageChanged(event: PageChangedEvent): void {
+    const startItem: number = (event.page - 1) * event.itemsPerPage;
+    const endItem: number = event.page * event.itemsPerPage;
+    this.filterArray = this.empleadosArray.slice(startItem, endItem);
+  }
 
-  
-    pageChanged(event: PageChangedEvent): void {
-      const startItem = (event.page - 1) * event.itemsPerPage;
-      this.endItem = event.page * event.itemsPerPage;
-      this.products = this.allproducts.slice(startItem, this.endItem);
-    }
-
-
-
-
+  onSort(column: string): void {
+    this.filterArray = this._sortedService.sorted(this.direction, this.filterArray, column);
+    this.direction = this.direction === 'asc' ? 'desc' : 'asc';
+  }
 }
